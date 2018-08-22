@@ -5,9 +5,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 SAMPLING_RATE = 44100
-AUDIO_FREQ = 2000
+AUDIO_FREQ = 100
 
-samples = np.sin(2*np.pi*AUDIO_FREQ/SAMPLING_RATE*np.array(range(int(np.floor(SAMPLING_RATE/AUDIO_FREQ)))))
+chunk_size = int(SAMPLING_RATE/AUDIO_FREQ)
+samples = np.sin(2*np.pi*AUDIO_FREQ/SAMPLING_RATE*np.array(range(chunk_size)))
 samples = samples.astype(np.float32)
 
 plt.plot(samples)
