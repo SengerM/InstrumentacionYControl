@@ -5,21 +5,18 @@ import wave
 import sys
 
 CHUNK_SIZE = 1024
-SAMPLING_RATE = 44.1e3
+SAMPLING_RATE = 44100
 
 p = pyaudio.PyAudio()
 
-stream = p.open(format=paInt16,
-                channels=wave_file.getnchannels(),
-                rate=wave_file.getframerate(), # Sampling rate
-                output=True)
-print(wave_file.getframerate())
-data = wave_file.readframes(CHUNK)
-while data != '':
-    stream.write(data)
-    data = wave_file.readframes(CHUNK)
+ostream = p.open(format=pyaudio.paInt16, channels=2, rate=SAMPLING_RATE, output=True)
 
-stream.stop_stream()
-stream.close()
+# data = wave_file.readframes(CHUNK)
+# while data != '':
+    # ostream.write(data)
+    # data = wave_file.readframes(CHUNK)
+
+ostream.stop_ostream()
+ostream.close()
 
 p.terminate()
