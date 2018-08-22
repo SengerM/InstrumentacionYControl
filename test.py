@@ -5,10 +5,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 SAMPLING_RATE = 44100
-AUDIO_FREQ = 1000
+AUDIO_FREQ = 2000
 
 samples = np.sin(2*np.pi*AUDIO_FREQ/SAMPLING_RATE*np.array(range(int(np.floor(SAMPLING_RATE/AUDIO_FREQ)))))
 samples = samples.astype(np.float32)
+
+plt.plot(samples)
+plt.show()
 
 p = pyaudio.PyAudio()
 
