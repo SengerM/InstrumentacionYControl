@@ -41,8 +41,8 @@ time.sleep(N_CYCLES/SIGNAL_FREQUENCY)
 f, axes = plt.subplots(2, sharex=True, figsize=(mplt.fig_width*mplt.fig_ratio[0]/25.4e-3, mplt.fig_width*mplt.fig_ratio[1]/25.4e-3)) # Create the figure for plotting.
 f.subplots_adjust(hspace=0.3) # Fine-tune figure; make subplots close to each other and hide x ticks for all but bottom plot.
 figs.append(f)
-axes[0].plot(np.linspace(0,N_CYCLES/SIGNAL_FREQUENCY,len(output_samples)), recorded_samples, color=mplt.colors[0], label='Recorded signal')
-axes[1].plot(np.linspace(0,N_CYCLES/SIGNAL_FREQUENCY,len(output_samples)), output_samples, color=mplt.colors[1], label='Output signal')
+axes[1].plot(np.linspace(0,N_CYCLES/SIGNAL_FREQUENCY,len(output_samples)), recorded_samples, color=mplt.colors[0], label='Recorded signal')
+axes[0].plot(np.linspace(0,N_CYCLES/SIGNAL_FREQUENCY,len(output_samples)), output_samples, color=mplt.colors[1], label='Output signal')
 for k in range(len(axes)):
 	mplt.beauty_grid(axes[k])
 	axes[k].set_ylabel('Amplitude')
