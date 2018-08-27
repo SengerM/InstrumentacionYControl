@@ -3,10 +3,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 import utils.matplotlib_my_utils as mplt
-
 # Parameters ------------------------------------
-AMPLITUDE = 1 # Amplitude of the signal between 0 and 1.
-OFFSET = 0 # Signal offset between -1 and +1. 
+AMPLITUDE = .5 # Amplitude of the signal between 0 and 1.
+OFFSET = .5 # Signal offset between -1 and +1. 
 SIGNAL_FREQUENCY = 100 # In Hertz.
 SIGNAL = 'squ' # 'sin', 'ramp', 'squ'
 N_CYCLES = 10 # This must be "a great number" to overcome a strange transitory of the sound card...
@@ -56,6 +55,7 @@ for k in range(len(axes)):
 	axes[k].set_ylabel('Amplitude')
 	axes[k].legend()
 axes[-1].set_xlabel('Time (s)')
+axes[0].set_ylim(-1.05,1.05)
 # Save figures -----------------------------------
 for k in range(len(figs)):
 	figs[k].savefig(str(k+1) + '.' + mplt.image_format, bbox_inches='tight', dpi=mplt.dpi_rasterization)
