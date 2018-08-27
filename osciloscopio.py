@@ -2,7 +2,6 @@ import sounddevice as sd
 import numpy as np
 import matplotlib.pyplot as plt
 import time
-import scipy.signal as signal
 import utils.matplotlib_my_utils as mplt
 
 # Parameters ------------------------------------
