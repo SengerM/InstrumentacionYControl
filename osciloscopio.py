@@ -5,7 +5,6 @@ import time
 import utils.matplotlib_my_utils as mplt
 # Parameters ------------------------------------
 AMPLITUDE = .5 # Amplitude of the signal between 0 and 1.
-OFFSET = .5 # Signal offset between -1 and +1. 
 SIGNAL_FREQUENCY = 100 # In Hertz.
 SIGNAL = 'squ' # 'sin', 'ramp', 'squ'
 N_CYCLES = 10 # This must be "a great number" to overcome a strange transitory of the sound card...
@@ -16,8 +15,8 @@ available_signals = ['sin','ramp','squ']
 # Validations -----------------------------------
 if not isinstance(SAMPLING_FREQUENCY, int):
 	raise ValueError('SAMPLING_FRECUENCY must be an integer number!')
-if AMPLITUDE + np.abs(OFFSET) > 1:
-	raise ValueError('AMPLITUDE+abs(OFFSET) must be less than 1 because the output samples must lie between +-1')
+if AMPLITUDE > 1:
+	raise ValueError('AMPLITUDE must be less than 1 because the output samples must lie between +-1')
 if available_signals.count(SIGNAL) == 0:
 	raise ValueError('Invalid type of signal. Parameter "SIGNAL" must be one of the following ' + str(available_signals))
 # Create the signal -----------------------------
@@ -33,7 +32,6 @@ samples -= np.min(samples)
 samples /= np.max(samples)
 samples -= 0.5
 samples *= 2*AMPLITUDE
-samples += OFFSET
 samples = samples.astype(np.float32)
 # Create the output samples ---------------------
 output_samples = samples
