@@ -4,11 +4,11 @@ import matplotlib.pyplot as plt
 import time
 import utils.matplotlib_my_utils as mplt
 # Parameters ------------------------------------
-SIGNAL_FREQUENCIES = np.logspace(np.log10(100),np.log10(1000),5) # In Hertz.
+SIGNAL_FREQUENCIES = np.logspace(np.log10(1000),np.log10(10000),50) # In Hertz.
 # -----------------------------------------------
 figs = [] # Do not touch this, ja!
 
-def frequency_response(frequencies, amplitude=1, measuring_cycles=100, rancius_time=0.5, sampling_frequency=48000):
+def frequency_response(frequencies, amplitude=1, measuring_cycles=20, rancius_time=0.5, sampling_frequency=48000):
 	# Validations -----------------------------------
 	if not isinstance(sampling_frequency, int):
 		raise ValueError('sampling_frequency must be an integer number!')
@@ -25,10 +25,11 @@ def frequency_response(frequencies, amplitude=1, measuring_cycles=100, rancius_t
 		samples *= 2*amplitude
 		samples = samples.astype(np.float32)
 		# Play and record samples -----------------------
-		recorded_samples = sd.playrec(samples, sampling_frequency, channels=1)
+		recorded_samples = sd.playrec(samples, sampling_frequency, channels=2)
 		time.sleep(len(samples)/sampling_frequency)
-		samples = samples[np.round(sampling_frequency*rancius_time):] # Discard rancius samples.
-		amplitudes[k] = 2*np.sum(samples**2)/len(samples)
+		recorded_samples = recorded_samples[np.round(sampling_frequency*rancius_time):] # Discard rancius samples.
+		recorded_samples = recorded_samples[:,1]
+		amplitudes[k] = 2*np.sum(recorded_samples**2)/len(recorded_samples)
 	return amplitudes
 
 amplitudes = frequency_response(SIGNAL_FREQUENCIES)
