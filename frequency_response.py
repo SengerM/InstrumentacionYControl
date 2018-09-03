@@ -26,9 +26,10 @@ def frequency_response(frequencies, amplitude=1, measuring_cycles=100, rancius_t
 		samples = samples.astype(np.float32)
 		# Play and record samples -----------------------
 		recorded_samples = sd.playrec(samples, sampling_frequency, channels=1)
-		time.sleep(len(samples)/sampling_frequency)
-		samples = samples[np.round(sampling_frequency*rancius_time):] # Discard rancius samples.
-		amplitudes[k] = 2*np.sum(samples**2)/len(samples)
+		time.sleep(len(samples)/sampling_frequency+0.1) #need a little more sleep
+		recorded_samples = recorded_samples[np.int(sampling_frequency*rancius_time):] # Discard rancius samples.
+		amplitudes[k]=np.max(recorded_samples)
+#		amplitudes[k] = 2*np.sum(recorded_samples**2)/len(recorded_samples)
 	return amplitudes
 
 amplitudes = frequency_response(SIGNAL_FREQUENCIES)
