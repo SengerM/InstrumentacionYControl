@@ -3,11 +3,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 import utils.matplotlib_my_utils as mplt
+import os
+os.system('cls')
 # Parameters ------------------------------------
-AMPLITUDE = .5 # Amplitude of the signal between 0 and 1.
+AMPLITUDE = 1 # Amplitude of the signal between 0 and 1.
 SIGNAL_FREQUENCY = 100 # In Hertz.
-SIGNAL = 'squ' # 'sin', 'ramp', 'squ'
-N_CYCLES = 100 # This must be "a great number" to overcome a strange transitory of the sound card...
+SIGNAL = 'sin' # 'sin', 'ramp', 'squ'
+N_CYCLES = 50 # This must be "a great number" to overcome a strange transitory of the sound card...
 SAMPLING_FREQUENCY = 48000 # Must be integer.
 # -----------------------------------------------
 figs = [] # Do not touch this, ja!
@@ -38,16 +40,16 @@ output_samples = samples
 for k in range(N_CYCLES-1):
 	output_samples = np.append(output_samples, samples)
 # Play and record samples -----------------------
-sd.default.samplerate = SAMPLING_FREQUENCY
-sd.default.channels = 1
-recorded_samples = sd.playrec(output_samples, SAMPLING_FREQUENCY)
+recorded_samples = sd.playrec(output_samples, SAMPLING_FREQUENCY, channels=2)
 time.sleep(N_CYCLES/SIGNAL_FREQUENCY)
+recorded_samples = np.transpose(recorded_samples)
 # PLOT ------------------------------------------
-f, axes = plt.subplots(2, sharex=True, figsize=(mplt.fig_width*mplt.fig_ratio[0]/25.4e-3, mplt.fig_width*mplt.fig_ratio[1]/25.4e-3)) # Create the figure for plotting.
+f, axes = plt.subplots(3, sharex=True, figsize=(mplt.fig_width*mplt.fig_ratio[0]/25.4e-3, mplt.fig_width*mplt.fig_ratio[1]/25.4e-3)) # Create the figure for plotting.
 f.subplots_adjust(hspace=0.3) # Fine-tune figure; make subplots close to each other and hide x ticks for all but bottom plot.
 figs.append(f)
-axes[1].plot(np.linspace(0,N_CYCLES/SIGNAL_FREQUENCY,len(output_samples)), recorded_samples, color=mplt.colors[0], label='Recorded signal')
-axes[0].plot(np.linspace(0,N_CYCLES/SIGNAL_FREQUENCY,len(output_samples)), output_samples, color=mplt.colors[1], label='Output signal')
+axes[0].plot(np.linspace(0,N_CYCLES/SIGNAL_FREQUENCY,len(output_samples)), output_samples, color=mplt.colors[0], label='Output signal')
+axes[1].plot(np.linspace(0,N_CYCLES/SIGNAL_FREQUENCY,len(output_samples)), recorded_samples[0], color=mplt.colors[1], label='Recorded signal[0]')
+axes[2].plot(np.linspace(0,N_CYCLES/SIGNAL_FREQUENCY,len(output_samples)), recorded_samples[1], color=mplt.colors[2], label='Recorded signal[1]')
 for k in range(len(axes)):
 	mplt.beauty_grid(axes[k])
 	axes[k].set_ylabel('Amplitude')
