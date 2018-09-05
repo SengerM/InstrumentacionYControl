@@ -60,5 +60,14 @@ axes.set_xlabel('Voltage')
 # Save figures -----------------------------------
 for k in range(len(figs)):
 	figs[k].savefig(timestamp + '_' + str(k+1) + '.' + mplt.image_format, bbox_inches='tight', dpi=mplt.dpi_rasterization)
+axes.plot(recorded_samples[int(rancius_time*SAMPLING_FREQUENCY):,1], recorded_samples[int(rancius_time*SAMPLING_FREQUENCY):,0], color=mplt.colors[0], label='Output signal')
+mplt.beauty_grid(axes)
+axes.set_ylabel('Amplitude')
+axes.legend()
+axes.set_xlabel('Time (s)')
+axes.set_ylim(-1.05,1.05)
+# Save figures -----------------------------------
+for k in range(len(figs)):
+	figs[k].savefig(str(k+1) + '.' + mplt.image_format, bbox_inches='tight', dpi=mplt.dpi_rasterization)
 
 plt.show()
