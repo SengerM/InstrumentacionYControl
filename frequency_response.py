@@ -8,7 +8,7 @@ SIGNAL_FREQUENCIES = np.logspace(np.log10(100),np.log10(1000),5) # In Hertz.
 # -----------------------------------------------
 figs = [] # Do not touch this, ja!
 
-def frequency_response(frequencies, amplitude=1, measuring_cycles=100, rancius_time=0.5, sampling_frequency=48000):
+def frequency_response(frequencies, amplitude=1, measuring_cycles=500, rancius_time=0.5, sampling_frequency=48000):
 	# Validations -----------------------------------
 	if not isinstance(sampling_frequency, int):
 		raise ValueError('sampling_frequency must be an integer number!')
@@ -28,8 +28,8 @@ def frequency_response(frequencies, amplitude=1, measuring_cycles=100, rancius_t
 		recorded_samples = sd.playrec(samples, sampling_frequency, channels=1)
 		time.sleep(len(samples)/sampling_frequency+0.1) #need a little more sleep
 		recorded_samples = recorded_samples[np.int(sampling_frequency*rancius_time):] # Discard rancius samples.
-		amplitudes[k]=np.max(recorded_samples)
-#		amplitudes[k] = 2*np.sum(recorded_samples**2)/len(recorded_samples)
+	#	amplitudes[k]=np.max(recorded_samples)
+		amplitudes[k] = 2*np.sum(recorded_samples**2)/len(recorded_samples)
 	return amplitudes
 
 amplitudes = frequency_response(SIGNAL_FREQUENCIES)

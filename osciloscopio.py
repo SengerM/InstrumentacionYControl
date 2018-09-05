@@ -7,7 +7,7 @@ import utils.matplotlib_my_utils as mplt
 AMPLITUDE = .5 # Amplitude of the signal between 0 and 1.
 SIGNAL_FREQUENCY = 100 # In Hertz.
 SIGNAL = 'squ' # 'sin', 'ramp', 'squ'
-N_CYCLES = 10 # This must be "a great number" to overcome a strange transitory of the sound card...
+N_CYCLES = 100 # This must be "a great number" to overcome a strange transitory of the sound card...
 SAMPLING_FREQUENCY = 48000 # Must be integer.
 # -----------------------------------------------
 figs = [] # Do not touch this, ja!
