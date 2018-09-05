@@ -3,12 +3,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 import utils.matplotlib_my_utils as mplt
+import utils.timestamp as tmstmp
 import scipy.optimize as opt
 import os
 os.system('cls')
 # Parameters ------------------------------------
 SIGNAL_FREQUENCIES = np.logspace(np.log10(100),np.log10(10e3),20) # In Hertz.
 # -----------------------------------------------
+timestamp = tmstmp.get()
 figs = [] # Do not touch this, ja!
 
 def frequency_response(frequencies, amplitude=1, measuring_cycles=100, rancius_time=0.5, sampling_frequency=48000):
@@ -71,6 +73,6 @@ axes[-1].set_xscale('log')
 axes[-1].set_xlabel('Frequency (Hz)')
 # Save figures -----------------------------------
 for k in range(len(figs)):
-	figs[k].savefig(str(k+1) + '.' + mplt.image_format, bbox_inches='tight', dpi=mplt.dpi_rasterization)
+	figs[k].savefig(timestamp + '_' + str(k+1) + '.' + mplt.image_format, bbox_inches='tight', dpi=mplt.dpi_rasterization)
 
 plt.show()

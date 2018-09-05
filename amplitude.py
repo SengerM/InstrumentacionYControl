@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 import matplotlib_my_utils as mplt
+import utils.timestamp as tmstmp
 import os
 os.system('cls')
 # Parameters ------------------------------------
@@ -13,6 +14,7 @@ N_CYCLES = 500 # This must be "a great number" to overcome a strange transitory 
 SAMPLING_FREQUENCY = 48000 # Must be integer.
 rancius_time=0.5 #time for start rec
 # -----------------------------------------------
+timestamp = tmstmp.get()
 figs = [] # Do not touch this, ja!
 available_signals = ['sin','ramp','squ']
 # Validations -----------------------------------
@@ -57,6 +59,6 @@ axes.set_ylabel('Current')
 axes.set_xlabel('Voltage')
 # Save figures -----------------------------------
 for k in range(len(figs)):
-	figs[k].savefig(str(k+1) + '.' + mplt.image_format, bbox_inches='tight', dpi=mplt.dpi_rasterization)
+	figs[k].savefig(timestamp + '_' + str(k+1) + '.' + mplt.image_format, bbox_inches='tight', dpi=mplt.dpi_rasterization)
 
 plt.show()
