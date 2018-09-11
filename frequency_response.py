@@ -7,10 +7,12 @@ import scipy.optimize as opt
 import os
 os.system('cls')
 # Parameters ------------------------------------
+SIGNAL_FREQUENCIES = np.logspace(np.log10(100),np.log10(10e3),20) # In Hertz.
 # -----------------------------------------------
 timestamp = tmstmp.get()
 figs = [] # Do not touch this, ja!
 
+def frequency_response(frequencies, amplitude=1, measuring_cycles=100, rancius_time=0.5, sampling_frequency=48000):
 	# Validations -----------------------------------
 	if not isinstance(sampling_frequency, int):
 		raise ValueError('sampling_frequency must be an integer number!')
@@ -27,9 +29,7 @@ figs = [] # Do not touch this, ja!
 		samples *= 2*amplitude
 		samples = samples.astype(np.float32)
 		# Play and record samples -----------------------
-		recorded_samples = sd.playrec(samples, sampling_frequency, channels=1)
 
-amplitudes = frequency_response(SIGNAL_FREQUENCIES)
 		recorded_samples = sd.playrec(samples, sampling_frequency, channels=2)
 		time.sleep(len(samples)/sampling_frequency+0.1) # The '0.1' extra was added because otherwise this does not work...
 		recorded_samples = np.transpose(recorded_samples)
@@ -56,6 +56,8 @@ amplitudes = frequency_response(SIGNAL_FREQUENCIES)
 		phase[k] = params[0][2] - params[1][2] # Phase difference.
 	return np.array(amplitudes), np.array(phase)
 
+
+amplitude, phase = frequency_response(SIGNAL_FREQUENCIES)
 
 # PLOT ------------------------------------------
 f, axes = plt.subplots(2, sharex=True, figsize=(mplt.fig_width*mplt.fig_ratio[0]/25.4e-3, mplt.fig_width*mplt.fig_ratio[1]/25.4e-3)) # Create the figure for plotting.
