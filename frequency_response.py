@@ -1,7 +1,6 @@
 import sounddevice as sd
 import numpy as np
 import matplotlib.pyplot as plt
-import time
 import utils.matplotlib_my_utils as mplt
 # Parameters ------------------------------------
 SIGNAL_FREQUENCIES = np.logspace(np.log10(100),np.log10(1000),5) # In Hertz.
@@ -26,7 +25,7 @@ def frequency_response(frequencies, amplitude=1, measuring_cycles=500, rancius_t
 		samples = samples.astype(np.float32)
 		# Play and record samples -----------------------
 		recorded_samples = sd.playrec(samples, sampling_frequency, channels=1)
-		time.sleep(len(samples)/sampling_frequency+0.1) #need a little more sleep
+		sd.wait() #it waits and returns as the recording is finished.
 		recorded_samples = recorded_samples[np.int(sampling_frequency*rancius_time):] # Discard rancius samples.
 	#	amplitudes[k]=np.max(recorded_samples)
 		amplitudes[k] = 2*np.sum(recorded_samples**2)/len(recorded_samples)

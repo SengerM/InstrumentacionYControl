@@ -1,8 +1,7 @@
 import sounddevice as sd
 import numpy as np
 import matplotlib.pyplot as plt
-import time
-import utils.matplotlib_my_utils as mplt
+import matplotlib_my_utils as mplt
 import os
 os.system('cls')
 # Parameters ------------------------------------
@@ -41,7 +40,7 @@ for k in range(N_CYCLES-1):
 	output_samples = np.append(output_samples, samples)
 # Play and record samples -----------------------
 recorded_samples = sd.playrec(output_samples, SAMPLING_FREQUENCY, channels=2)
-time.sleep(N_CYCLES/SIGNAL_FREQUENCY)
+sd.wait() #it waits and returns as the recording is finished.
 recorded_samples = np.transpose(recorded_samples)
 # PLOT ------------------------------------------
 f, axes = plt.subplots(3, sharex=True, figsize=(mplt.fig_width*mplt.fig_ratio[0]/25.4e-3, mplt.fig_width*mplt.fig_ratio[1]/25.4e-3)) # Create the figure for plotting.
