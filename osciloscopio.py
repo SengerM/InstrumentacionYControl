@@ -1,7 +1,13 @@
 import sounddevice as sd
 import numpy as np
 import matplotlib.pyplot as plt
+<<<<<<< HEAD
 import matplotlib_my_utils as mplt
+=======
+import time
+import utils.matplotlib_my_utils as mplt
+import utils.timestamp as tmstmp
+>>>>>>> bad3444f0c03fa3fec58bf3f47663190767e23ad
 import os
 os.system('cls')
 # Parameters ------------------------------------
@@ -11,6 +17,7 @@ SIGNAL = 'sin' # 'sin', 'ramp', 'squ'
 N_CYCLES = 50 # This must be "a great number" to overcome a strange transitory of the sound card...
 SAMPLING_FREQUENCY = 48000 # Must be integer.
 # -----------------------------------------------
+timestamp = tmstmp.get()
 figs = [] # Do not touch this, ja!
 available_signals = ['sin','ramp','squ']
 # Validations -----------------------------------
@@ -57,6 +64,6 @@ axes[-1].set_xlabel('Time (s)')
 axes[0].set_ylim(-1.05,1.05)
 # Save figures -----------------------------------
 for k in range(len(figs)):
-	figs[k].savefig(str(k+1) + '.' + mplt.image_format, bbox_inches='tight', dpi=mplt.dpi_rasterization)
+	figs[k].savefig(timestamp + '_' + str(k+1) + '.' + mplt.image_format, bbox_inches='tight', dpi=mplt.dpi_rasterization)
 
 plt.show()
