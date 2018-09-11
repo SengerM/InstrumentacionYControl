@@ -1,7 +1,6 @@
 import sounddevice as sd
 import numpy as np
 import matplotlib.pyplot as plt
-import time
 import matplotlib_my_utils as mplt
 import utils.timestamp as tmstmp
 import os
@@ -44,7 +43,7 @@ for k in range(N_CYCLES-1):
 	output_samples = np.append(output_samples, samples)
 # Play and record samples -----------------------
 recorded_samples = sd.playrec(output_samples, SAMPLING_FREQUENCY, channels=2)
-time.sleep(N_CYCLES/SIGNAL_FREQUENCY)
+sd.wait() #it waits and returns as the recording is finished.
 recorded_samples = np.transpose(recorded_samples)
 samples = [None]*2
 samples[0] = recorded_samples[0][int(rancius_time*SAMPLING_FREQUENCY):]
