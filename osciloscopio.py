@@ -1,13 +1,9 @@
 import sounddevice as sd
 import numpy as np
 import matplotlib.pyplot as plt
-<<<<<<< HEAD
-import matplotlib_my_utils as mplt
-=======
 import time
 import utils.matplotlib_my_utils as mplt
 import utils.timestamp as tmstmp
->>>>>>> bad3444f0c03fa3fec58bf3f47663190767e23ad
 import os
 os.system('cls')
 # Parameters ------------------------------------

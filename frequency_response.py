@@ -31,7 +31,7 @@ def frequency_response(frequencies, amplitude=1, measuring_cycles=100, rancius_t
 		# Play and record samples -----------------------
 
 		recorded_samples = sd.playrec(samples, sampling_frequency, channels=2)
-		time.sleep(len(samples)/sampling_frequency+0.1) # The '0.1' extra was added because otherwise this does not work...
+		sd.wait() #it waits and returns as the recording is finished.
 		recorded_samples = np.transpose(recorded_samples)
 		recorded_samples_fixed = [None]*2
 		params = [None]*2
