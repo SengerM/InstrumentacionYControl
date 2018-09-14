@@ -1,9 +1,8 @@
 import sounddevice as sd
 import numpy as np
 import matplotlib.pyplot as plt
-import time
-import utils.matplotlib_my_utils as mplt
-import utils.timestamp as tmstmp
+import matplotlib_my_utils as mplt
+import timestamp as tmstmp
 import scipy.optimize as opt
 import os
 os.system('cls')
@@ -30,8 +29,9 @@ def frequency_response(frequencies, amplitude=1, measuring_cycles=100, rancius_t
 		samples *= 2*amplitude
 		samples = samples.astype(np.float32)
 		# Play and record samples -----------------------
+
 		recorded_samples = sd.playrec(samples, sampling_frequency, channels=2)
-		time.sleep(len(samples)/sampling_frequency+0.1) # The '0.1' extra was added because otherwise this does not work...
+		sd.wait() #it waits and returns as the recording is finished.
 		recorded_samples = np.transpose(recorded_samples)
 		recorded_samples_fixed = [None]*2
 		params = [None]*2
@@ -53,8 +53,14 @@ def frequency_response(frequencies, amplitude=1, measuring_cycles=100, rancius_t
 		# axes[1].plot(func(params[1],np.arange(len(recorded_samples_fixed[1]))), color=mplt.colors[3], label='Fit right')
 			
 		amplitudes[k] = np.max(recorded_samples_fixed[0])/np.max(recorded_samples_fixed[1])
-		phase[k] = params[0][2] - params[1][2] # Phase difference.
+		phase[k] = (params[0][2] - params[1][2])*180/np.pi # Phase difference.
+		if phase[k]<-90: #so there are no phase breaks
+			phase[k]=180+phase[k]
+		if phase[k]<-90:
+			phase[k]=180+phase[k]
+            
 	return np.array(amplitudes), np.array(phase)
+
 
 amplitude, phase = frequency_response(SIGNAL_FREQUENCIES)
 
@@ -63,7 +69,7 @@ f, axes = plt.subplots(2, sharex=True, figsize=(mplt.fig_width*mplt.fig_ratio[0]
 f.subplots_adjust(hspace=0.3) # Fine-tune figure; make subplots close to each other and hide x ticks for all but bottom plot.
 figs.append(f)
 axes[0].plot(SIGNAL_FREQUENCIES, amplitude, color=mplt.colors[0], label='Amplitude', marker='.')
-axes[1].plot(SIGNAL_FREQUENCIES, phase*180/np.pi, color=mplt.colors[1], label='Phase', marker='.')
+axes[1].plot(SIGNAL_FREQUENCIES, phase, color=mplt.colors[1], label='Phase', marker='.')
 for k in range(len(axes)):
 	mplt.beauty_grid(axes[k])
 axes[0].set_ylabel('Amplitude')
