@@ -1,7 +1,7 @@
 import numpy as np
 
 dpi_rasterization = 200 # Resolution for png format.
-image_format = 'png'
+image_format = 'pdf'
 colors = [(255, 102, 0), (51, 153, 255), (51, 102, 0), (255, 0, 255)]
 colors = np.array(colors)/255
 fig_width = 160e-3 # Figure width in meters (size of the chart+axis_ticks, not counting legend, title, etc.).

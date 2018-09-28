@@ -1,13 +1,13 @@
 import sounddevice as sd
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib_my_utils as mplt
+import utils.matplotlib_my_utils as mplt
 import timestamp as tmstmp
 import scipy.optimize as opt
 import os
-os.system('cls')
+os.system('clear')
 # Parameters ------------------------------------
-SIGNAL_FREQUENCIES = np.logspace(np.log10(100),np.log10(10e3),20) # In Hertz.
+SIGNAL_FREQUENCIES = np.logspace(np.log10(10),np.log10(100e3),4) # In Hertz.
 # -----------------------------------------------
 timestamp = tmstmp.get()
 figs = [] # Do not touch this, ja!

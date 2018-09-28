@@ -1,17 +1,19 @@
 import sounddevice as sd
 import numpy as np
 import matplotlib.pyplot as plt
+import time
 import utils.matplotlib_my_utils as mplt
 import utils.timestamp as tmstmp
 import os
 os.system('clear')
 # Parameters ------------------------------------
-AMPLITUDE = 1 # Amplitude of the signal between 0 and 1.
-SIGNAL_FREQUENCY = 1000 # In Hertz.
+AMPLITUDE = -1 # Amplitude of the signal between 0 and 1.
+SIGNAL_FREQUENCY = 100 # In Hertz.
 SIGNAL = 'sin' # 'sin', 'ramp', 'squ'
-N_CYCLES = 500 # This must be "a great number" to overcome a strange transitory of the sound card...
+N_CYCLES = 100 # This must be "a great number" to overcome a strange transitory of the sound card...
 SAMPLING_FREQUENCY = 48000 # Must be integer.
-rancius_time=0.5 #time for start rec
+RANCIUS_CYCLES = N_CYCLES - 10
+CALIBRATION_FACTOR = 1.22*np.sqrt(2)/0.8 # Volt/unidades de placa de sonido
 # -----------------------------------------------
 timestamp = tmstmp.get()
 figs = [] # Do not touch this, ja!
@@ -45,28 +47,37 @@ for k in range(N_CYCLES-1):
 recorded_samples = sd.playrec(output_samples, SAMPLING_FREQUENCY, channels=2)
 sd.wait() #it waits and returns as the recording is finished.
 recorded_samples = np.transpose(recorded_samples)
-samples = [None]*2
-samples[0] = recorded_samples[0][int(rancius_time*SAMPLING_FREQUENCY):]
-samples[1] = recorded_samples[1][int(rancius_time*SAMPLING_FREQUENCY):]
+new_samples = [None]*2
+new_samples[0] = recorded_samples[0][int(RANCIUS_CYCLES*SAMPLING_FREQUENCY/SIGNAL_FREQUENCY):]
+new_samples[1] = recorded_samples[1][int(RANCIUS_CYCLES*SAMPLING_FREQUENCY/SIGNAL_FREQUENCY):]
+new_time = np.linspace(0,N_CYCLES/SIGNAL_FREQUENCY,len(new_samples[0]))
+# PLOT ------------------------------------------
+f, axes = plt.subplots(3, sharex=True, figsize=(mplt.fig_width*mplt.fig_ratio[0]/25.4e-3, mplt.fig_width*mplt.fig_ratio[1]/25.4e-3)) # Create the figure for plotting.
+f.subplots_adjust(hspace=0.3) # Fine-tune figure; make subplots close to each other and hide x ticks for all but bottom plot.
+figs.append(f)
+axes[0].plot(new_time, output_samples[-len(new_time):], color=mplt.colors[0], label='Output signal')
+axes[1].plot(new_time, new_samples[0], color=mplt.colors[1], label='Recorded signal[0]')
+axes[2].plot(new_time, new_samples[1], color=mplt.colors[2], label='Recorded signal[1]')
+for k in range(len(axes)):
+	mplt.beauty_grid(axes[k])
+	axes[k].set_ylabel('Amplitude')
+	axes[k].legend()
+	axes[k].set_ylim(-1.05,1.05)
+axes[-1].set_xlabel('Time (s)')
 # PLOT ------------------------------------------
 f, axes = plt.subplots(1, sharex=True, figsize=(mplt.fig_width*mplt.fig_ratio[0]/25.4e-3, mplt.fig_width*mplt.fig_ratio[1]/25.4e-3)) # Create the figure for plotting.
 f.subplots_adjust(hspace=0.3) # Fine-tune figure; make subplots close to each other and hide x ticks for all but bottom plot.
 figs.append(f)
-axes.plot(samples[0], samples[1] - samples[0], color=mplt.colors[0])
+axes.plot(new_samples[0]-new_samples[1], new_samples[1], color=mplt.colors[0])
 mplt.beauty_grid(axes)
-axes.set_ylabel('Current')
-axes.set_xlabel('Voltage')
+axes.set_ylabel('Corriente')
+axes.set_xlabel('Tension')
 # Save figures -----------------------------------
 for k in range(len(figs)):
 	figs[k].savefig(timestamp + '_' + str(k+1) + '.' + mplt.image_format, bbox_inches='tight', dpi=mplt.dpi_rasterization)
-axes.plot(recorded_samples[int(rancius_time*SAMPLING_FREQUENCY):,1], recorded_samples[int(rancius_time*SAMPLING_FREQUENCY):,0], color=mplt.colors[0], label='Output signal')
-mplt.beauty_grid(axes)
-axes.set_ylabel('Amplitude')
-axes.legend()
-axes.set_xlabel('Time (s)')
-# axes.set_ylim(-1.05,1.05)
-# Save figures -----------------------------------
-for k in range(len(figs)):
-	figs[k].savefig(str(k+1) + '.' + mplt.image_format, bbox_inches='tight', dpi=mplt.dpi_rasterization)
+with open(timestamp + '.txt', 'a') as ofile:
+	print('Time (s)\tCH1 (V)\tCH2 (V)', file=ofile) # Print header.
+	for k in range(len(new_time)):
+		print(str(new_time[k]) + '\t' + str(new_samples[0][k]) + '\t' + str(new_samples[1][k]), file=ofile)
 
 plt.show()
